@@ -23,6 +23,15 @@ export class MovementMySQLRepository implements MovementRepository {
         
     }
 
+    public async findByUserId(user_id: number): Promise<Movement[]>{
+        const [rows] = await connector.execute(
+                'SELECT * FROM wallet_movement WHERE user_id = ? ',
+                [user_id]
+            );
+        return rows as Movement[];
+        
+    }
+
     public async store(entry:Movement): Promise<void>{
         const now = new Date();
         await connector.execute(

@@ -23,6 +23,18 @@ export class BalanceMySQLRepository implements BalanceRepository {
         
     }
 
+    public async findByUserId(user_id: number): Promise<Balance | null>{
+        const [rows]: any[] = await connector.execute(
+                'SELECT * FROM wallet_balance WHERE user_id = ? ',
+                [user_id]
+            );
+        if(rows.length){
+            return rows[0] as Balance;
+        }
+        return null;
+        
+    }
+
     public async store(entry:Balance): Promise<void>{
         const now = new Date();
         await connector.execute(

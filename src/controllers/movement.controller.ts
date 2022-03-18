@@ -1,7 +1,8 @@
 import { Request, Response} from 'express';
-import { route, GET, POST, PUT, DELETE } from 'awilix-express';
+import { route, GET, POST } from 'awilix-express';
 import { MovementService } from '../services/movement.service';
 import { BaseController } from '../common/controllers/base.controller';
+import { MovementCreateDto } from '../dtos/movement.dto';
 
 @route('/movements')
 export class MovementController extends BaseController{
@@ -43,6 +44,26 @@ export class MovementController extends BaseController{
         }
     }
 
+    //Ex: movements/user/1
+    @route('/user/:user_id')
+    @GET()
+    public async findByUserId (req: Request, res: Response) {
+        try{
+            const user_id = parseInt(req.params.id);
+            const result = await this.movementService.findByUserId(user_id);
+
+            if(result){
+                res.send(result);
+            }else{
+                res.status(404);
+                res.send();
+            }
+           
+        }catch(error){
+            this.handleException(error, res);
+        }
+    }
+
     @POST()
     public async create (req: Request, res: Response) {
         try{
@@ -52,34 +73,6 @@ export class MovementController extends BaseController{
                 type: req.body.type,
             } as MovementCreateDto);
 
-            res.send();
-        }catch(error){
-            this.handleException(error, res);
-        }
-    }
-
-    @route('/:id')
-    @PUT()
-    public async update (req: Request, res: Response) {
-        try{
-            const id = parseInt(req.params.id);
-            await this.movementService.update(id, {
-                amount: req.body.amount,
-                type: req.body.type,
-            } as MovementUpdateDto);
-            
-            res.send();
-        }catch(error){
-            this.handleException(error, res);
-        }
-    }
-
-    @route('/:id')
-    @DELETE()
-    public async remove (req: Request, res: Response) {
-        try{
-            const id = parseInt(req.params.id);
-            await this.movementService.remove(id);
             res.send();
         }catch(error){
             this.handleException(error, res);

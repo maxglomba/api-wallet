@@ -1,13 +1,12 @@
+import { MovementType } from '../common/enums/movement-types';
 
 interface MovementCreateDto {
     id: number;
     user_id: number;
-    type: number;
+    type: MovementType;
     amount: number;
 }
 
-interface MovementUpdateDto {
-    user_id: number;
-    type: number;
-    amount: number;
-}
+export {
+    MovementCreateDto
+};

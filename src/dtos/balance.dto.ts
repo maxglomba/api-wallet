@@ -8,3 +8,9 @@ interface BalanceUpdateDto {
     user_id: number;
     amount: number;
 }
+
+
+export {
+    BalanceCreateDto,
+    BalanceUpdateDto
+};

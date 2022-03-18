@@ -1,4 +1,5 @@
 import { ApplicationExceptions } from '../common/persistence/exception/application.exception';
+import { SubscriptionCreateDto, SubscriptionUpdateDto } from '../dtos/subscription.dto';
 import { Subscription } from './repositories/domain/subscription';
 //este dominio es una interface con todos los campos que se extraen de la base de datos
 import { SubscriptionRepository } from './repositories/subscription.repository';
@@ -37,7 +38,7 @@ export class SubscriptionService {
         if(isDuplicatedCode){
             throw new ApplicationExceptions('Code is duplicated');
         }
-        let originalEntry = await this.subscriptionRepository.find(id);
+        const originalEntry = await this.subscriptionRepository.find(id);
         if(originalEntry){
             originalEntry.code = entry.code;
             originalEntry.amount = entry.amount;
