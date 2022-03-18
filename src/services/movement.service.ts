@@ -64,7 +64,7 @@ export class MovementService {
             balance.amount -= entry.amount;
         } else {
             //if not exists a balance or outcome amount is grather than balance amount, can't do this operation
-            throw new ApplicationExceptions('Insuficient founds.');
+            throw new ApplicationExceptions('User does not have enought balance.');
         }
         await this.balanceRepository.update(balance);
     }
