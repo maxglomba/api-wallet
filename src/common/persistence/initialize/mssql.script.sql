@@ -1,4 +1,7 @@
-CREATE DATABASE kodoti_wallet
+IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'kodoti_wallet')
+  BEGIN
+    CREATE DATABASE [DataBase]
+  END
 GO
 
 USE [kodoti_wallet]
@@ -8,7 +11,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[wallet_balance](
+CREATE TABLE IF NOT EXISTS [dbo].[wallet_balance](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[user_id] [int] NOT NULL,
 	[amount] [decimal](18, 2) NOT NULL,

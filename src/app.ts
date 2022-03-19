@@ -11,6 +11,8 @@ dotenv.config({
 import express = require('express');
 import { loadControllers } from 'awilix-express';
 import loadContainer from './container';
+import cors from 'cors';
+import jwt from 'express-jwt';
 
 const app: express.Application = express();
 
@@ -19,6 +21,18 @@ app.use(express.json());
 
 //Container
 loadContainer(app);
+
+//CORS
+app.use(cors());
+
+//JWT
+if(process.env.jwt_secret_key){
+    app.use(jwt({
+        secret: process.env.jwt_secret_key,
+        algorithms: ['H256']
+    }));
+}
+
 
 //Controllers
 app.use(loadControllers(
