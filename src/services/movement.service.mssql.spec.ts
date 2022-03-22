@@ -1,16 +1,24 @@
 import assert = require('assert');
 import { MovementService } from './movement.service';
 
-import { MovementMOCKRepository } from './repositories/impl/mock/movement.repository';
-import { BalanceMOCKRepository } from './repositories/impl/mock/balance.repository';
+//set environment vars
+import Environment from '../common/tests/env.test';
+const environment = new Environment();
+environment.set();
+
+import { MovementMySQLRepository } from './repositories/impl/mysql/movement.repository';
+import { BalanceMySQLRepository } from './repositories/impl/mysql/balance.repository';
 import { MovementCreateDto } from '../dtos/movement.dto';
 
+const BD = 'MYSQL';
+
 const movementService = new MovementService(
-    new MovementMOCKRepository(),
-    new BalanceMOCKRepository()
+    new MovementMySQLRepository(),
+    new BalanceMySQLRepository()
 );
 
-describe('Movement.Service', () => {
+
+describe(BD + '- Movement.Service', () => {
     describe('Store', () => {
         it('tries to register an income request', async () => {
             await movementService.store({
@@ -25,7 +33,7 @@ describe('Movement.Service', () => {
             await movementService.store({
                 user_id: 1,
                 type: 1,
-                amount: 300
+                amount: 100
             } as MovementCreateDto);
         });
 
@@ -36,8 +44,12 @@ describe('Movement.Service', () => {
                     type: 1,
                     amount: 10000
                 } as MovementCreateDto);
-            } catch (error: any) {
-                assert.equal(error.message, 'User does not have enought balance.');
+            } catch (error) {
+                let errorMessage = 'An exceptional error has ocurred';
+                if(error instanceof Error){
+                    errorMessage = error.message;
+                }
+                assert.equal(errorMessage, 'User does not have enought balance.');
             }
 
         });
@@ -50,8 +62,12 @@ describe('Movement.Service', () => {
                     amount: 10000
                 };
                 await movementService.store(movement as MovementCreateDto);
-            } catch (error: any) {
-                assert.equal(error.message, 'Invalid movement type supplied.');
+            } catch (error) {
+                let errorMessage = 'An exceptional error has ocurred';
+                if(error instanceof Error){
+                    errorMessage = error.message;
+                }
+                assert.equal(errorMessage, 'Invalid movement type supplied.');
             }
         });
 
