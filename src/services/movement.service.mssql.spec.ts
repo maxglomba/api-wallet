@@ -1,4 +1,4 @@
-import assert = require('assert');
+import assert from 'assert';
 import { MovementService } from './movement.service';
 
 //set environment vars
